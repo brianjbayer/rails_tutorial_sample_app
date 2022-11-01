@@ -29,4 +29,17 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     # Both the label and inputs should be wrapped in div.field_with_errors
     assert_select 'div.field_with_errors', (2 * expected_err_count)
   end
+
+  test 'valid signup information' do
+    assert_difference 'User.count', 1 do
+      post users_path, params: { user: { name: 'Example User',
+                                         email: 'user@example.com',
+                                         password: 'password',
+                                         password_confirmation: 'password' } }
+    end
+    follow_redirect!
+    assert_template 'users/show'
+    assert_not_empty flash
+    assert_select 'div.alert.alert-success'
+  end
 end
