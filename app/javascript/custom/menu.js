@@ -1,20 +1,20 @@
 // Menu manipulation
 
-// Add toggle listeners to listen for clicks.
-// NOTE: use the turbo page load event "turbo:load"
-//       instead of the JS page load event "DOMContentLoaded"
-document.addEventListener("turbo:load", function() {
-  let hamburger = document.querySelector("#hamburger");
-  hamburger.addEventListener("click", function(event) {
+// Adds a toggle listener
+function addToggleClickListener(
+  clicked_selector,
+  toggled_selector,
+  toggle_class) {
+  let selected_element = document.querySelector(clicked_selector);
+  selected_element.addEventListener("click", function (event) {
     event.preventDefault();
-    let menu =document.querySelector("#navbar-menu");
-    menu.classList.toggle("collapse")
+    let listened_element = document.querySelector(toggled_selector);
+    listened_element.classList.toggle(toggle_class);
   });
+}
 
-  let account = document.querySelector("#account");
-  account.addEventListener("click", function(event) {
-    event.preventDefault();
-    let menu = document.querySelector("#dropdown-menu");
-    menu.classList.toggle("active");
-  });
+// Add toggle listeners to listen for clicks
+document.addEventListener("turbo:load", function() {
+  addToggleClickListener("#hamburger", "#navbar-menu", "collapse");
+  addToggleClickListener("#account", "#dropdown-menu", "active");
 });
