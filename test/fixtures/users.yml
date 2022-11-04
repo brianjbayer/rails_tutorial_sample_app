@@ -1,3 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# TODO: Implement real fixtures later
+# NOTE: All fixture users should use the same underlying password since
+# the user fixtures use the encrypted password_digest
+
+michael:
+  name: Michael Example
+  email: michael@example.com
+  password_digest: <%= User.digest('password') %>
