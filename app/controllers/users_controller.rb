@@ -26,6 +26,15 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      # TODO: Handle a successful update
+    else
+      render 'edit', status: :unprocessable_entity
+    end
+  end
+
   private
 
   def user_params
