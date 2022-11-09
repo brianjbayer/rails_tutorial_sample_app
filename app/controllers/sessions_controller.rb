@@ -5,12 +5,12 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user&.authenticate(params[:session][:password])
+    @user = User.find_by(email: params[:session][:email].downcase)
+    if @user&.authenticate(params[:session][:password])
       reset_session
-      remember_me_checked? ? remember(user) : forget(user)
-      log_in user
-      redirect_to user
+      remember_me_checked? ? remember(@user) : forget(@user)
+      log_in @user
+      redirect_to @user
     else
       # Use flash.now since render is not a request
       flash.now[:danger] = 'Invalid email/password combination'
