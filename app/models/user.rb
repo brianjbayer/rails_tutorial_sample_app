@@ -12,8 +12,10 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
 
+  # Note that has_secure_password ensures non-nil password (on create)
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  # Note allow_nil: true permits empty passwords (don't update) on user#update
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   # Returns the hash digest (e.g. password_digest) of the given string
   # This should match...
