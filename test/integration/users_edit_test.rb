@@ -7,6 +7,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user = users(:michael)
   end
   test 'unsuccessful edit' do
+    log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     expected_err_count = 4
@@ -19,14 +20,15 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'successful edit' do
+    log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     name = "Foo Bar"
     email = "foo@bar.com"
     patch user_path(@user), params: { user: { name: name,
-      email: email,
-      password: '',
-      password_confirmation: '' } }
+                                              email: email,
+                                              password: '',
+                                              password_confirmation: '' } }
     assert_redirected_to @user
     follow_redirect!
     assert_not_empty flash
