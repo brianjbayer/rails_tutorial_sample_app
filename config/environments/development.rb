@@ -39,6 +39,11 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  host = ENV.fetch('HOST') { 'localhost' }
+  port = ENV.fetch('PORT') { 3000 }
+  local_host = "#{host}:#{port}"
+  config.action_mailer.default_url_options = { host: local_host, protocol: 'http' }
+
   config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
