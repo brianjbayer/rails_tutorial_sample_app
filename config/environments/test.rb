@@ -43,8 +43,12 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  # --- CUSTOMIZED MAILER CONFIGURATION ---
   # NOTE: The actual host does not matter but does need set
   config.action_mailer.default_url_options = { host: '' }
+
+  config.action_mailer.default_options = { from: 'notsending@email.com' }
+  # --- END CUSTOMIZED MAILER CONFIGURATION ---
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
