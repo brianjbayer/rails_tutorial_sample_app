@@ -62,6 +62,35 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "sample_app_production"
 
+  # --- CUSTOMIZED MAILER CONFIGURATION ---
+  config.action_mailer.default_url_options = { host: ENV['APP_DOMAIN'] }
+
+  if ENV.include?('DISABLE_SENDING_MAIL')
+    # Don't care if the mailer can't send.
+    config.action_mailer.raise_delivery_errors = false
+    config.action_mailer.default_options = { from: 'notsending@email.com' }
+  else
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.default_options = { from: 'no-reply@sampleapp.com' }
+    config.action_mailer.delivery_method = :smtp
+    # SMTP settings for gmail
+    gmail_username = ENV['MAIL_SERVICE_USERNAME']
+    gmail_password = ENV['MAIL_SERVICE_PASSWORD']
+    # config.action_mailer.default_options = { from: "#{gmail_username}@gmail.com" }
+    config.action_mailer.smtp_settings = {
+      address:              'smtp.gmail.com',
+      port:                 587,
+      domain:               'gmail.com',
+      user_name:            gmail_username,
+      password:             gmail_password,
+      authentication:       'plain',
+      enable_starttls_auto: true,
+      open_timeout:         5,
+      read_timeout:         5 }
+  end
+  # --- END CUSTOMIZED MAILER CONFIGURATION ---
+
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
