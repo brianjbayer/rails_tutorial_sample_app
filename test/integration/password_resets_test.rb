@@ -6,6 +6,7 @@ class PasswordResets < ActionDispatch::IntegrationTest
   def setup
     # Clear out any emails
     ActionMailer::Base.deliveries.clear
+    @user = users(:michael)
   end
 end
 
@@ -27,7 +28,6 @@ end
 class PasswordResetForm < PasswordResets
   def setup
     super
-    @user = users(:michael)
     post password_resets_path params: { password_reset: { email: @user.email } }
     @reset_user = assigns(:user)
   end
@@ -93,5 +93,32 @@ class PasswordUpdateTest < PasswordResetForm
     assert is_logged_in?
     assert_not_empty flash
     assert_redirected_to @reset_user
+  end
+end
+
+class ExpiredToken < PasswordResets
+  def setup
+    super
+    # Create a password-reset token
+    post password_resets_path params: { password_reset: { email: @user.email } }
+    @reset_user = assigns(:user)
+    # Expire the token
+    @reset_user.update_attribute(:reset_sent_at, 3.hours.ago)
+    # Attempt to update the user's password
+    patch password_reset_path(@reset_user.reset_token),
+          params: { email: @reset_user.email,
+                    user: { password: 'foobaz',
+                            password_confirmation: 'foobaz' } }
+  end
+end
+
+class ExpiredTokenTest < ExpiredToken
+  test 'should redirect to the password-reset page' do
+    assert_redirected_to new_password_reset_url
+  end
+
+  test 'should include the word "expired" on the password-reset page' do
+    follow_redirect!
+    assert_match /\sexpired/i, response.body
   end
 end
