@@ -11,4 +11,8 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :edit, :create, :update]
   resources :microposts, only: [:create, :destroy]
+  # HACK: Some (older) browsers may result in the error...
+  #       No route matches [GET] "/microposts"
+  # when refreshing after invalid Micropost
+  get '/microposts', to: 'static_pages#home'
 end
