@@ -6,7 +6,8 @@
 # bundle exec bin/rails server -p 3000 -b 0.0.0.0
 
 # --- Base Image ---
-FROM brianjbayer/rails-7.0.4-ruby-3.1.2-dev
+ARG BASE_TAG=latest
+FROM brianjbayer/rails-7.0.4-ruby-3.1.2-dev:${BASE_TAG}
 
 # Static config
 ARG APP_ROOT=/app
