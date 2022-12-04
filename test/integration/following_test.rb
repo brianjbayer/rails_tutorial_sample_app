@@ -16,7 +16,8 @@ class FollowingTest < Following
     assert_not @user.following.empty?
     assert_match @user.following.count.to_s, response.body
     @user.following.each do |user|
-      assert_select 'a[href=?]', user_path(user)
+      # There should be 3 links: sidebar gravatar, user name and gravatar
+      assert_select 'a[href=?]', user_path(user), count: 3
     end
   end
 
@@ -26,7 +27,8 @@ class FollowingTest < Following
     assert_not @user.followers.empty?
     assert_match @user.followers.count.to_s, response.body
     @user.followers.each do |user|
-      assert_select 'a[href=?]', user_path(user)
+      # There should be 3 links: sidebar gravatar, user name and gravatar
+      assert_select 'a[href=?]', user_path(user), count: 3
     end
   end
 end
